@@ -18,7 +18,7 @@ namespace AssetBundleFramework.Editor {
         /// <summary>
         /// 设置Ab包名称
         /// </summary>
-        [MenuItem("AssetBundleTools/Set AB Label")]
+        [MenuItem("AssetBundleTools/Set AB Label", false, 0)]
         public static void SetAbLabel() {
             // 需要给Asset做标记的根目录
             string needSetLabelRoot = PathTools.GetAbResourcesPath();
@@ -81,7 +81,7 @@ namespace AssetBundleFramework.Editor {
             // 参数检查,去除meta文件
             if (fileInfo.Extension.Equals(".meta"))
                 return;
-                
+
             // 将文件全名分解,分解为 Asset/... 目录
             int assetDataPathPos = fileInfo.FullName.IndexOf("Asset", StringComparison.Ordinal);
             // 为资源文件设置ab包名称和后缀名
@@ -131,5 +131,5 @@ namespace AssetBundleFramework.Editor {
                     return "ab";
             }
         }
-    }// Class_End
-}// Namespace_End
+    } // Class_End
+} // Namespace_End
