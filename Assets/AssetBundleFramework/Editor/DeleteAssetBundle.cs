@@ -21,5 +21,5 @@ namespace AssetBundleFramework.Editor {
             // 刷新Asset/
             AssetDatabase.Refresh();
         }
-    }
-}
+    } // Class_End
+} // Namespace_End
