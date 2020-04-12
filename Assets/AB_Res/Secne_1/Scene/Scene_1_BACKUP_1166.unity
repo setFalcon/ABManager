@@ -397,6 +397,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
+=======
 --- !u!1001 &6740799118318170485
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -466,3 +468,4 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2fac9bb388800e24598be25275bf9fd9, type: 3}
+>>>>>>> editor
