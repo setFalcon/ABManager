@@ -77,19 +77,37 @@ namespace AssetBundleFramework {
         /// <param name="asset">要卸载的资源</param>
         /// <returns>卸载是否成功</returns>
         public bool UnlLoadAsset(Object asset) {
+            // 参数检查,判定asset是否为空
+            if (asset != null) {
+                // 卸载Asset资源
+                Resources.UnloadAsset(asset);
+                return true;
+            }
+
+            // 释放Asset资源失败
+            Debug.LogError($"{GetType()}/UnlLoadAsset方法传入的参数asset=null,无法卸载空资源");
             return false;
         }
 
         /// <summary>
         /// 释放当前的AssetBundle镜像资源
         /// </summary>
-        public void Dispose() { }
-        
+        public void Dispose() {
+            _currentAssetBundle.Unload(false);
+        }
+
         /// <summary>
         /// 释放当前的AssetBundle镜像资源和内存资源
         /// </summary>
-        public void DisposeAll() { }
-        
-        //查询当前AssetBundle包中所包含的所有资源
+        public void DisposeAll() {
+            _currentAssetBundle.Unload(true);
+        }
+
+        /// <summary>
+        /// 查询当前AssetBundle包中所包含的所有资源
+        /// </summary>
+        public string[] RetrivalAllAssetName() {
+            return _currentAssetBundle.GetAllAssetNames();
+        }
     } // Class_End
 } // Namespace_End
