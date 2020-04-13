@@ -6,7 +6,7 @@
 
 ## 如何使用📕
 
-​	使用给git工具，使用[^git clone]命令将此项目clone到您的计算机上，将[^AssetBundleFramework/]文件夹下的所有文件拷贝至您Unity项目的Asset/文件夹下。您也可以使用Clone or Download功能下载此项目的zip压缩包，按照上述过程将此项目部署即可。
+​	使用给git工具，使用==git clone==命令将此项目clone到您的计算机上，将[^AssetBundleFramework/]文件夹下的所有文件拷贝至您Unity项目的Asset/文件夹下。您也可以使用Clone or Download功能下载此项目的zip压缩包，按照上述过程将此项目部署即可。
 
 ## 快速入门:airplane:
 
@@ -95,7 +95,7 @@ public static string GetWWWPath() {
 }
 ```
 
-## TODO List:fist_left:
+## TODO List:artificial_satellite:
 
 - 资源加载尚未全部完成
 - 示例代码尚未编写
@@ -104,7 +104,6 @@ public static string GetWWWPath() {
 
 
 
-[^git clone]: 用法 - git clone 项目Url 
 [^AssetBundleFramework/]: http://101.200.242.244:3000/setFalcon/ABManager/src/master/Assets/AssetBundleFramework
 [^Asset/AB_Res/Scene_1/Materials/DemoMat.mat]:资源名称为DemoMat，位于场景名称为Scene_1的场景中，是一个材质资源
 [^PathTools.cs]:http://101.200.242.244:3000/setFalcon/ABManager/src/master/Assets/AssetBundleFramework/Tools/PathTools.cs
