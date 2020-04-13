@@ -12,7 +12,9 @@ namespace AssetBundleFramework {
     public class SingleAssetBundleLoader : System.IDisposable {
         // 引用:资源加载类,通过加载Asset的方法加载Ab包中的Asset
         private AssetLoader _loader;
-        // 委托:
+
+        // 委托:AssetBundle资源加载完成
+        private LoadComplete _loadCompleteHandler;
 
         // AssetBundle名称
         private string _abName;
@@ -23,11 +25,10 @@ namespace AssetBundleFramework {
         /// <summary>
         /// 构造函数,初始化字段
         /// </summary>
-        public SingleAssetBundleLoader(string abName) {
+        public SingleAssetBundleLoader(string abName, LoadComplete completeHandler) {
             _loader = null;
             _abName = abName;
-            // 委托的定义
-
+            _loadCompleteHandler = completeHandler;
             _downloadPath = Path.Combine(PathTools.GetWWWPath(), _abName);
         }
 
@@ -45,6 +46,8 @@ namespace AssetBundleFramework {
                     if (downloadAb != null) {
                         // 实例化引用
                         _loader = new AssetLoader(downloadAb);
+                        // AssetBundle下载完毕,调用委托方法
+                        _loadCompleteHandler?.Invoke(_abName);
                     }
                     else {
                         Debug.LogError($"{GetType()}/LoadAssetBundleWWW方法使用参数路径" +
