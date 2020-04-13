@@ -79,5 +79,35 @@ namespace AssetBundleFramework.Tools {
             }
             return platformName;
         }
+
+        /// <summary>
+        /// 获取Ab包的WWW路径
+        /// </summary>
+        /// <returns></returns>
+        public static string GetWWWPath() {
+            string wwwPath = String.Empty;
+            switch (Application.platform) {
+                // Windows
+                case RuntimePlatform.WindowsPlayer:
+                case RuntimePlatform.WindowsEditor:
+                    wwwPath = "file://" + GetAbOutputPath();
+                    break;
+                // Linux
+                case RuntimePlatform.LinuxEditor:
+                case RuntimePlatform.LinuxPlayer:
+                    wwwPath = "file://" + GetAbOutputPath();
+                    break;
+                // IOS
+                case RuntimePlatform.IPhonePlayer:
+                    wwwPath = "file://" + GetAbOutputPath();
+                    break;
+                // Android
+                case RuntimePlatform.Android:
+                    wwwPath = "jar:file://" + GetAbOutputPath();
+                    break;
+            }
+
+            return wwwPath;
+        }
     }// Class_End
 }// Namespace_End
