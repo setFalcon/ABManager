@@ -6,7 +6,7 @@
 
 ## 如何使用📕
 
-​	使用给git工具，使用==git clone==命令将此项目clone到您的计算机上，将[^AssetBundleFramework/]文件夹下的所有文件拷贝至您Unity项目的Asset/文件夹下。您也可以使用Clone or Download功能下载此项目的zip压缩包，按照上述过程将此项目部署即可。
+​	使用给git工具，使用**git clone**命令将此项目clone到您的计算机上，将[^AssetBundleFramework/]文件夹下的所有文件拷贝至您Unity项目的Asset/文件夹下。您也可以使用Clone or Download功能下载此项目的zip压缩包，按照上述过程将此项目部署即可。
 
 ## 快速入门:airplane:
 
