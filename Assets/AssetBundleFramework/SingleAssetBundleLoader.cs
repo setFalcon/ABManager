@@ -1,9 +1,7 @@
 using System.Collections;
 using System.IO;
-using System.Linq.Expressions;
 using AssetBundleFramework.Tools;
 using UnityEngine;
-using Object = System.Object;
 
 namespace AssetBundleFramework {
     /// <summary>
@@ -76,8 +74,51 @@ namespace AssetBundleFramework {
         }
 
         /// <summary>
+        /// 卸载Ab包中的资源
+        /// </summary>
+        /// <param name="asset">要卸载的资源</param>
+        public void UnloadAsset(Object asset) {
+            // 参数检查:加载器检查
+            if (_loader != null) {
+                _loader.UnloadAsset(asset);
+            }
+            else {
+                Debug.LogError($"{GetType()}/UnloadAsset方法因为加载器没有赋值故此无法卸载指定的资源");
+            }
+        }
+
+        /// <summary>
         /// 释放资源
         /// </summary>
-        public void Dispose() { }
+        public void Dispose() {
+            if (_loader != null) {
+                _loader.Dispose();
+                _loader = null;
+            }
+            else {
+                Debug.LogError($"{GetType()}/Dispose方法因为资源加载器没有赋值故此无法卸载回收相应资源");
+            }
+        }
+
+        /// <summary>
+        /// 卸载当前的AssetBundle资源包且卸载与其相关的所有资源
+        /// </summary>
+        public void DisposeAll() {
+            if (_loader != null) {
+                _loader.DisposeAll();
+                _loader = null;
+            }
+            else {
+                Debug.LogError($"{GetType()}/DisposeAll方法因为资源加载器没有赋值故此无法卸载回收相应资源");
+            }
+        }
+
+        /// <summary>
+        /// 查询当前AssetBundle包中所包含的所有资源
+        /// </summary>
+        /// <returns>所有资源的名称数组</returns>
+        public string[] RetrivalAllAssetName() {
+            return _loader?.RetrivalAllAssetName();
+        }
     } // Class_End
 } // Namespace_End

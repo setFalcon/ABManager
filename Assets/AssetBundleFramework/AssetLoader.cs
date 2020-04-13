@@ -76,7 +76,7 @@ namespace AssetBundleFramework {
         /// </summary>
         /// <param name="asset">要卸载的资源</param>
         /// <returns>卸载是否成功</returns>
-        public bool UnlLoadAsset(Object asset) {
+        public bool UnloadAsset(Object asset) {
             // 参数检查,判定asset是否为空
             if (asset != null) {
                 // 卸载Asset资源
