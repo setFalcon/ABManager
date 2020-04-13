@@ -52,13 +52,13 @@ private static string GetPlatformPath() {
 	//平台路径
 	string platformPath = String.Empty;
 	switch (Application.platform) {
-    	......//per codes...
-        case RuntimePlatform.#:
-            // 此处的路径应由平台性质决定
-            // 一般来说Liunx与Windows平台使用Application.streamingAssetsPath
-            // ios与Android平台使用Application.persistentDataPath
+		......//per codes...
+		case RuntimePlatform.#:
+			// 此处的路径应由平台性质决定
+			// 一般来说Liunx与Windows平台使用Application.streamingAssetsPath
+			// ios与Android平台使用Application.persistentDataPath
 			platformPath = Application.persistentDataPath;
-            break;
+		break;
 	}
 	return platformPath;
 }
@@ -68,13 +68,13 @@ private static string GetPlatformPath() {
 /// <returns>平台名称</returns>
 private static string GetPlatformName() {
 	string platformName = String.Empty;
-    switch (Application.platform) {
-        ......//per codes...
-    	case RuntimePlatform.#:
-    		platformName = "#";
-        break;
-    }
-    return platformName;
+	switch (Application.platform) {
+		......//per codes...
+		case RuntimePlatform.#:
+			platformName = "#";
+		break;
+	}
+	return platformName;
 }
 /// <summary>
 /// 获取Ab包的WWW路径
@@ -83,26 +83,28 @@ private static string GetPlatformName() {
 public static string GetWWWPath() {
 	string wwwPath = String.Empty;
 	switch (Application.platform) {
-        ......//per codes...
-    	case RuntimePlatform.#:
-            // 此处的路径应由平台性质决定
-            // 一般来说Windows平台使用"file://" + GetAbOutputPath()
-            // Android平台使用"jar:file://" + GetAbOutputPath()
+		......//per codes...
+		case RuntimePlatform.#:
+			// 此处的路径应由平台性质决定
+			// 一般来说Windows平台使用"file://" + GetAbOutputPath()
+			// Android平台使用"jar:file://" + GetAbOutputPath()
 			wwwPath = "jar:file://" + GetAbOutputPath();
-			break;
-    }
-    return wwwPath;
+		break;
+	}
+	return wwwPath;
 }
 ```
 
-## TODO List:label
+## TODO List:fist_left:
 
 - 资源加载尚未全部完成
 - 示例代码尚未编写
 - 多包管理器尚未开始
 - 快速入门使用部分未添加如何使用
 
-[^git clone]: 用法: git clone 项目Url 
+
+
+[^git clone]: 用法 - git clone 项目Url 
 [^AssetBundleFramework/]: http://101.200.242.244:3000/setFalcon/ABManager/src/master/Assets/AssetBundleFramework
 [^Asset/AB_Res/Scene_1/Materials/DemoMat.mat]:资源名称为DemoMat，位于场景名称为Scene_1的场景中，是一个材质资源
 [^PathTools.cs]:http://101.200.242.244:3000/setFalcon/ABManager/src/master/Assets/AssetBundleFramework/Tools/PathTools.cs
