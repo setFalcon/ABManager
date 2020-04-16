@@ -9,7 +9,7 @@ namespace AssetBundleFramework {
     /// </summary>
     public class SingleAssetBundleLoader : System.IDisposable {
         // 引用:资源加载类,通过加载Asset的方法加载Ab包中的Asset
-        private AssetLoader _loader;
+        private AssetLoader _assetLoader;
 
         // 委托:AssetBundle资源加载完成
         private LoadComplete _loadCompleteHandler;
@@ -24,7 +24,7 @@ namespace AssetBundleFramework {
         /// 构造函数,初始化字段
         /// </summary>
         public SingleAssetBundleLoader(string abName, LoadComplete completeHandler) {
-            _loader = null;
+            _assetLoader = null;
             _abName = abName;
             _loadCompleteHandler = completeHandler;
             _downloadPath = Path.Combine(PathTools.GetWWWPath(), _abName);
@@ -43,7 +43,7 @@ namespace AssetBundleFramework {
                     AssetBundle downloadAb = www.assetBundle;
                     if (downloadAb != null) {
                         // 实例化引用
-                        _loader = new AssetLoader(downloadAb);
+                        _assetLoader = new AssetLoader(downloadAb);
                         // AssetBundle下载完毕,调用委托方法
                         _loadCompleteHandler?.Invoke(_abName);
                     }
@@ -63,13 +63,13 @@ namespace AssetBundleFramework {
         /// <param name="isCache">是否缓存</param>
         /// <returns>Asset资源</returns>
         public Object LoadAsset(string assetName, bool isCache) {
-            if (_loader != null) {
-                return _loader.LoadAsset(assetName, isCache);
+            if (_assetLoader != null) {
+                return _assetLoader.LoadAsset(assetName, isCache);
             }
 
             // 加载失败
             Debug.Log($"{GetType()}/LoadAsset方法加载位于" +
-                      $"{_loader}加载器中的{assetName}资源失败");
+                      $"{_assetLoader}加载器中的{assetName}资源失败");
             return null;
         }
 
@@ -79,8 +79,8 @@ namespace AssetBundleFramework {
         /// <param name="asset">要卸载的资源</param>
         public void UnloadAsset(Object asset) {
             // 参数检查:加载器检查
-            if (_loader != null) {
-                _loader.UnloadAsset(asset);
+            if (_assetLoader != null) {
+                _assetLoader.UnloadAsset(asset);
             }
             else {
                 Debug.LogError($"{GetType()}/UnloadAsset方法因为加载器没有赋值故此无法卸载指定的资源");
@@ -91,9 +91,9 @@ namespace AssetBundleFramework {
         /// 释放资源
         /// </summary>
         public void Dispose() {
-            if (_loader != null) {
-                _loader.Dispose();
-                _loader = null;
+            if (_assetLoader != null) {
+                _assetLoader.Dispose();
+                _assetLoader = null;
             }
             else {
                 Debug.LogError($"{GetType()}/Dispose方法因为资源加载器没有赋值故此无法卸载回收相应资源");
@@ -104,9 +104,9 @@ namespace AssetBundleFramework {
         /// 卸载当前的AssetBundle资源包且卸载与其相关的所有资源
         /// </summary>
         public void DisposeAll() {
-            if (_loader != null) {
-                _loader.DisposeAll();
-                _loader = null;
+            if (_assetLoader != null) {
+                _assetLoader.DisposeAll();
+                _assetLoader = null;
             }
             else {
                 Debug.LogError($"{GetType()}/DisposeAll方法因为资源加载器没有赋值故此无法卸载回收相应资源");
@@ -118,7 +118,7 @@ namespace AssetBundleFramework {
         /// </summary>
         /// <returns>所有资源的名称数组</returns>
         public string[] RetrivalAllAssetName() {
-            return _loader?.RetrivalAllAssetName();
+            return _assetLoader?.RetrivalAllAssetName();
         }
     } // Class_End
 } // Namespace_End
