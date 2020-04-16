@@ -1,13 +1,13 @@
 namespace AssetBundleFramework.Tools {
 
     /// <summary>
-    /// 完成AssetBundle加载委托
+    /// AssetBundle加载完成后使用的委托
     /// </summary>
-    /// <param name="abName">委托名称</param>
+    /// <param name="abName">加载的AssetBundle包名称</param>
     public delegate void LoadComplete(string abName);
     
     /// <summary>
-    /// 定义项目中的所有的常量以及委托/枚举定义
+    /// 所有的常量以及枚举类型的封装
     /// </summary>
     public class AssetBundleDefine {
         

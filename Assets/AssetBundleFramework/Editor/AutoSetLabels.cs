@@ -1,125 +1,105 @@
 ﻿using System;
-using UnityEngine;
-using UnityEditor;
 using System.IO;
 using AssetBundleFramework.Tools;
+using UnityEditor;
+using UnityEngine;
 
 namespace AssetBundleFramework.Editor {
     /// <summary>
-    /// 自动为资源文件添加标记的工具类
-    /// 开发思路：
-    ///     1. 定位需要打包资源的文件夹根目录
-    ///     2. 遍历所有场景资源文件夹
-    ///         - 遍历场景目录下所有的场景文件
-    ///             * 如果是文件夹，仍需要继续递归访问
-    ///             * 找到文件，使用AssetImporter修改标记包名后缀名
+    /// 自动为资源文件添加标记的工具类,此工具类会为资源文件夹下的所有Asset设置包标记
+    /// 资源文件应该存储到路径PathTools.GetAbResourcesPath()方法的返回值对应的文件夹中
+    /// 在打包前应保证所有的Asset资源都被正确标记上,否则在后续流程中会出现错误
     /// </summary>
     public static class AutoSetLabels {
         /// <summary>
-        /// 设置Ab包名称
+        /// 自动为PathTools.GetAbResourcesPath()文件夹下的所有Asset设置包标记
+        /// 包标记的规则为: 场景名称/资源类型    ab/u3d
         /// </summary>
         [MenuItem("AssetBundleTools/Set AB Label", false, 0)]
         public static void SetAbLabel() {
-            // 需要给Asset做标记的根目录
-            string needSetLabelRoot = PathTools.GetAbResourcesPath();
-            // 需要打包的资源目录
-            DirectoryInfo[] resDirs = new DirectoryInfo(needSetLabelRoot).GetDirectories();
-            // 清空无用标记
-            AssetDatabase.RemoveUnusedAssetBundleNames();
-
-            // 遍历所有场景资源文件夹
-            foreach (DirectoryInfo resDir in resDirs) {
-                DirectoryInfo tmpResDirInfo = new DirectoryInfo(resDir.FullName);
-                // 确定资源文件夹名称
-                string resDirName = resDir.FullName;
+            string needSetLabelRoot = PathTools.GetAbResourcesPath(); // Asset存储的根目录
+            DirectoryInfo[] resDirs = new DirectoryInfo(needSetLabelRoot).GetDirectories(); // 获取资源文件夹的所有子文件夹
+            AssetDatabase.RemoveUnusedAssetBundleNames(); // 清空所有的无用标记
+            foreach (DirectoryInfo resDir in resDirs) { // 遍历所有场景资源文件夹
+                DirectoryInfo tmpResDirInfo = new DirectoryInfo(resDir.FullName); // 分类文件夹的信息
+                string resDirName = resDir.FullName; // 资源文件夹的全称
 #if UNITY_EDITOR_WIN
-                resDirName = resDirName.Replace('\\', '/');
+                resDirName = resDirName.Replace('\\', '/'); // Windows下将所有的\分隔符转为成/
 #endif
-                // 获得场景名称
-                int tmpIndex = resDirName.LastIndexOf("/", StringComparison.Ordinal);
-                string tmpSceneName = resDirName.Substring(tmpIndex + 1);
-                // 递归调用判定方法
-                JudgeTypeByRecursive(tmpResDirInfo, tmpSceneName);
+                int tmpIndex = resDirName.LastIndexOf("/", StringComparison.Ordinal); // 场景名称字符串位置
+                string tmpSceneName = resDirName.Substring(tmpIndex + 1); // 场景名称 
+                JudgeTypeByRecursive(tmpResDirInfo, tmpSceneName); // 递归调用判定方法
             }
 
-            //刷新Assset，提示打包完成信息
-            AssetDatabase.Refresh();
-            Debug.Log("本次操作设置标记完成！");
+            AssetDatabase.Refresh(); // 刷新Project视图
+            Debug.Log("本次操作设置标记完成！"); // 提示打包完成信息
         }
 
         /// <summary>
-        /// 递归判断文件类型是文件夹还是实际文件，修改标记
+        /// 递归考察文件夹下所有的文件以及文件夹
         /// </summary>
         /// <param name="currDir">当前考察的文件夹</param>
-        /// <param name="sceneName">设定的前缀名称</param>
+        /// <param name="sceneName">场景名称</param>
         private static void JudgeTypeByRecursive(DirectoryInfo currDir, string sceneName) {
-            // 参数检查
-            if (!currDir.Exists) {
+            if (!currDir.Exists) { // 要考察的文件夹不存在
                 Debug.LogError($"文件目录名称:{currDir}不存在,请检查");
                 return;
             }
 
-            // 获取下一目录文件信息集合
-            FileSystemInfo[] directories = currDir.GetFileSystemInfos();
+            FileSystemInfo[] directories = currDir.GetFileSystemInfos(); // 获取此目录下的文件信息集合
             foreach (FileSystemInfo fileInfo in directories) {
-                if (fileInfo is FileInfo) { //文件
-                    // 修改文件的AssetBundle标签
-                    SetFileAbLabel(fileInfo as FileInfo, sceneName);
+                if (fileInfo is FileInfo info) { // 资源是文件类型
+                    SetFileAbLabel(info, sceneName); // 修改相应的Asset包标签
                 }
-                else { // 目录,递归调用当前方法,继续深入下层文件夹进行判定
+                else { // 资源是目录类型,递归调用当前方法,继续深入子文件夹进行判定
                     JudgeTypeByRecursive(fileInfo as DirectoryInfo, sceneName);
                 }
             }
         }
 
         /// <summary>
-        /// 使用AssetImporter进行文件Ab包名称标记
+        /// 使用AssetImporter进行文件Ab包标签设置
         /// </summary>
         /// <param name="fileInfo">文件信息</param>
         /// <param name="sceneName">场景名称</param>
         private static void SetFileAbLabel(FileInfo fileInfo, string sceneName) {
-            // 参数检查,去除meta文件
-            if (fileInfo.Extension.Equals(".meta"))
+            if (fileInfo.Extension.Equals(".meta") || fileInfo.Extension.Equals(".Ds_store")) // 去除所有的系统生成文件
                 return;
 
-            // 将文件全名分解,分解为 Asset/... 目录
-            int assetDataPathPos = fileInfo.FullName.IndexOf("Asset", StringComparison.Ordinal);
-            // 为资源文件设置ab包名称和后缀名
-            AssetImporter importer = AssetImporter.GetAtPath(fileInfo.FullName.Substring(assetDataPathPos));
-            Debug.Log(GetAbName(fileInfo, sceneName));
-            importer.assetBundleName = GetAbName(fileInfo, sceneName);
-            importer.assetBundleVariant = GetAbVariant(fileInfo);
+
+            int assetDataPathPos = fileInfo.FullName
+                .IndexOf("Asset", StringComparison.Ordinal); // 获取文件名称中Asset的位置,便于获取相对路径
+            AssetImporter importer = AssetImporter
+                .GetAtPath(fileInfo.FullName.Substring(assetDataPathPos)); // 资源相对路径对应的AssetImporter
+            importer.assetBundleName = GetAbName(fileInfo, sceneName); // 设定前缀
+            importer.assetBundleVariant = GetAbVariant(fileInfo); // 设定后缀
         }
 
         /// <summary>
-        /// 获取Ab包名称:"二级目录名称+三级目录名称+文件名称"
+        /// 获取Ab包名称的方法
+        /// 包名规则: 场景名+用途分类+文件名称
         /// </summary>
         /// <param name="fileInfo">文件信息</param>
         /// <param name="sceneName">场景名称</param>
         /// <returns>Ab包名称</returns>
         private static string GetAbName(FileInfo fileInfo, string sceneName) {
-            // 最终的ab包名称
-            string abName = String.Empty;
-            // 资源的全路径
-            string assetFileFullName = fileInfo.FullName;
+            string abName = String.Empty;// 最终获得的Ab包名称
+            string assetFileFullName = fileInfo.FullName;// 资源的全路径
 #if UNITY_EDITOR_WIN
-            assetFileFullName = assetFileFullName.Replace('\\', '/');
+            assetFileFullName = assetFileFullName.Replace('\\', '/');// Windows下将所有的\分隔符转为成/
 #endif
-            // 定位"场景名称"后的字符位置
-            int sceneNamePos = assetFileFullName.IndexOf(sceneName, StringComparison.Ordinal) + sceneName.Length;
-            // ab包中"类型名称"区域
-            string abFileNameArea = assetFileFullName.Substring(sceneNamePos + 1);
-
-            if (abFileNameArea.Contains("/")) {
+            int sceneNamePos = assetFileFullName.IndexOf(sceneName, StringComparison.Ordinal) + sceneName.Length;// 定位场景名字符位置
+            string abFileNameArea = assetFileFullName.Substring(sceneNamePos + 1); // 截取用途分类字符串
+            if (abFileNameArea.Contains("/")) {// 检查是否符合命名规范
                 string[] tmpSpilt = abFileNameArea.Split('/');
-                abName = sceneName + "/" + tmpSpilt[0];
+                abName = sceneName + "/" + tmpSpilt[0];// 场景名+用途分类
             }
 
             return abName;
         }
 
         /// <summary>
-        /// 设置Ab包扩展名称
+        /// 设置Ab包的扩展名称
         /// </summary>
         /// <param name="fileInfo">文件信息</param>
         /// <returns>Ab包扩展名</returns>
@@ -127,7 +107,7 @@ namespace AssetBundleFramework.Editor {
             switch (fileInfo.Extension) {
                 case ".unity": // 场景类型文件
                     return "u3d";
-                default:
+                default:// 其他类型文件
                     return "ab";
             }
         }

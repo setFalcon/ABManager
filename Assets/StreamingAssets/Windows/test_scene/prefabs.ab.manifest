@@ -1,0 +1,37 @@
+ManifestFileVersion: 0
+CRC: 1789445701
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 88d9f335112bb86405be0f584dc59f28
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: bf9c568eb9502f17057e0ba645d9d642
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 64
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+Assets:
+- Assets/AB_Res/Test_Scene/Prefabs/Cube.prefab
+- Assets/AB_Res/Test_Scene/Prefabs/Quad.prefab
+- Assets/AB_Res/Test_Scene/Prefabs/Cylinder.prefab
+Dependencies:
+- D:/UnityCode/ABManager/Assets/StreamingAssets/Windows/test_scene/materials.ab

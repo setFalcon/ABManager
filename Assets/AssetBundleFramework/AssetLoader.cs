@@ -1,39 +1,39 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace AssetBundleFramework {
     /// <summary>
-    /// 管理/加载(cache)/卸载/查看指定的Ab包中存储的资源
+    /// 管理AssetBundle包中资源加载的封装类
+    /// AssetBundleLoader中包含AssetLoader类型的实例引用
+    /// AssetBundleLoader会使用AssetLoader中的加载方法加载AssetBundle中的所有资源
+    /// 最终的接口会暴露在AssetBundleLoader对象的实例中
+    /// 即加载AssetBundle中的资源时,您完全不需要考虑AssetLoader中资源加载方法的的实现细节
     /// </summary>
-    public class AssetLoader : System.IDisposable {
-        // 当前的AssetBundle包
-        private AssetBundle _currentAssetBundle;
-
-        // AssetBundle包中加载过的Asset的缓存容器
-        private Hashtable _cachedAsset;
+    public class AssetLoader : IDisposable {
+        private AssetBundle _currentAssetBundle; // 资源加载的来源:AssetBundle包的引用
+        private Hashtable _cachedAsset; // _currentAssetBundle包中已经载入过的Asset实例缓存池
 
         /// <summary>
-        /// 构造器,进行初始化
+        /// AssetLoader构造器,进行资源加载相关的初始化
         /// </summary>
-        /// <param name="loadedAb">已经通过UnityWebRequestAssetBundle或者WWW加载的AssetBundle资源</param>
+        /// <param name="loadedAb">已经通过UnityWebRequestAssetBundle或者WWW方式加载完毕的AssetBundle资源</param>
         public AssetLoader(AssetBundle loadedAb) {
-            // 参数检查,检查是否传入空的AssetBundle
-            if (loadedAb != null) {
-                // 参数初始化
-                _currentAssetBundle = loadedAb;
+            if (loadedAb != null) { // 检查传入的AssetBundle是否有效
+                _currentAssetBundle = loadedAb; // 有效则初始化AssetBundle引用以及Asset缓存池
                 _cachedAsset = new Hashtable();
             }
             else {
-                // 未传入AssetBundle的情况
-                Debug.LogError($"{GetType()}/构造函数中传入的参数loadAb=null,请检查参数输入");
+                Debug.LogError($"{GetType()}/构造函数中传入的参数loadAb=null,请检查参数输入"); // 未传入有效的AssetBundle
             }
         }
 
         /// <summary>
-        /// 加载Ab包中的指定资源
+        /// 加载AssetBundle包中的指定名称的资源,并表明是否需要进行缓存
         /// </summary>
-        /// <param name="assetName">要加载的资源名称</param>
-        /// <param name="isCache">是否进行缓存处理</param>
+        /// <param name="assetName">加载的资源名称</param>
+        /// <param name="isCache">缓存处理</param>
         /// <returns>Ab包中的指定资源</returns>
         public Object LoadAsset(string assetName, bool isCache = false) {
             return LoadResource<Object>(assetName, isCache);
@@ -41,28 +41,22 @@ namespace AssetBundleFramework {
 
 
         /// <summary>
-        /// 加载Ab包中的指定资源
+        /// 加载AssetBundle包中的指定名称的资源的泛型实现
         /// </summary>
-        /// <param name="assetName">要加载的资源名称</param>
-        /// <param name="isCache">是否进行缓存处理</param>
+        /// <param name="assetName">加载的资源名称</param>
+        /// <param name="isCache">缓存处理</param>
         /// <typeparam name="T">加载的资源类型</typeparam>
         /// <returns></returns>
         private T LoadResource<T>(string assetName, bool isCache = false) where T : Object {
-            // 检查缓存中是否存储了资源
-            if (_cachedAsset.Contains(assetName)) {
-                //返回缓存中的内容
-                return _cachedAsset[assetName] as T;
+            if (_cachedAsset.Contains(assetName)) { // 缓存中存储了要加载的资源
+                return _cachedAsset[assetName] as T; //返回缓存中的内容
             }
 
-            // 资源未缓存,进行资源加载
-            T loadedAsset = _currentAssetBundle.LoadAsset<T>(assetName);
-            // 判断是否加入缓存集合
-            if (loadedAsset != null && isCache) {
-                // 成功加载
-                _cachedAsset.Add(assetName, loadedAsset);
+            T loadedAsset = _currentAssetBundle.LoadAsset<T>(assetName); // 资源未缓存,进行资源加载
+            if (loadedAsset != null && isCache) { // 判断是否需要将加载的资源加入缓存集合
+                _cachedAsset.Add(assetName, loadedAsset); // 资源需要被缓存
             }
-            else if (loadedAsset == null) {
-                // 未能成功加载
+            else if (loadedAsset == null) { // 资源加载失败
                 Debug.LogError(
                     $"{GetType()}/LoadResource<T>方法根据参数assetName={assetName}" +
                     $"无法在AssetBundle:{_currentAssetBundle}中加载相关资源");
@@ -77,10 +71,8 @@ namespace AssetBundleFramework {
         /// <param name="asset">要卸载的资源</param>
         /// <returns>卸载是否成功</returns>
         public bool UnloadAsset(Object asset) {
-            // 参数检查,判定asset是否为空
-            if (asset != null) {
-                // 卸载Asset资源
-                Resources.UnloadAsset(asset);
+            if (asset != null) {// 判定传入的asset是否为空
+                Resources.UnloadAsset(asset); // 卸载此Asset资源
                 return true;
             }
 
@@ -104,7 +96,7 @@ namespace AssetBundleFramework {
         }
 
         /// <summary>
-        /// 查询当前AssetBundle包中所包含的所有资源
+        /// 查询当前AssetBundle包中所包含的所有资源名称
         /// </summary>
         public string[] RetrivalAllAssetName() {
             return _currentAssetBundle.GetAllAssetNames();

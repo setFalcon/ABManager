@@ -1,0 +1,21 @@
+ManifestFileVersion: 0
+CRC: 1745547403
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: adb7753d41e9f7c4b71eb86110abd9dc
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: fe397485c3cec1106b49e9ff95e8f8a2
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/AB_Res/Test_Scene/Materials/CubMat.mat
+Dependencies:
+- D:/UnityCode/ABManager/Assets/StreamingAssets/Windows/test_scene/textures.ab

@@ -4,36 +4,36 @@ using UnityEngine;
 
 namespace AssetBundleFramework.Tools {
     /// <summary>
-    /// 路径工具类,包括文件的路径常量,以及路径的相关方法
+    /// 路径相关的工具类,封装了资源输入路径以及AssetBundle输出路径
+    /// 所有的路径相关功能方法的封装类型,减少耦合
     /// </summary>
     public class PathTools {
-        // 路径常量
-        public const string AB_RESOURCES = "AB_Res";
+        public const string AB_RESOURCES = "AB_Res"; // 资源文件夹的名称
 
-        // 路径相关方法
         /// <summary>
-        /// 得到资源文件的相对路径 Assets/...
+        /// 获得资源文件夹的相对路径
+        /// 相对路径格式: Assets/val(AB_RESOURCES)
         /// </summary>
-        /// <returns>资源文件的相对路径</returns>
+        /// <returns>资源文件夹的相对路径</returns>
         public static string GetAbResourcesPath() {
             return Path.Combine(Application.dataPath, AB_RESOURCES);
         }
 
         /// <summary>
-        /// 获取Ab输出路径 平台路径+平台名称
+        /// 获取AssetBundle包的输出路径
+        /// 输出路径格式: 与平台相关的数据路径+平台名称
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Ab包的输出路径</returns>
         public static string GetAbOutputPath() {
-            return Path.Combine(GetPlatformPath(),GetPlatformName());
+            return Path.Combine(GetPlatformPath(), GetPlatformName());
         }
-        
+
         /// <summary>
-        /// 获取平台路径
+        /// 获取与平台相关的数据路径
         /// </summary>
-        /// <returns>平台路径</returns>
+        /// <returns>平台相关的数据路径</returns>
         private static string GetPlatformPath() {
-            //平台路径
-            string platformPath = String.Empty;
+            string platformPath = String.Empty; // 平台相关的数据路径
             switch (Application.platform) {
                 // Windows | Linux
                 case RuntimePlatform.WindowsPlayer:
@@ -48,9 +48,10 @@ namespace AssetBundleFramework.Tools {
                     platformPath = Application.persistentDataPath;
                     break;
             }
+
             return platformPath;
         }
-        
+
         /// <summary>
         /// 获取平台的名称
         /// </summary>
@@ -77,15 +78,16 @@ namespace AssetBundleFramework.Tools {
                     platformName = "Android";
                     break;
             }
+
             return platformName;
         }
 
         /// <summary>
-        /// 获取Ab包的WWW路径
+        /// 获取AssetBundle的存储路径并将其转换为WWW的加载路径
         /// </summary>
-        /// <returns></returns>
+        /// <returns>本地加载Ab包所使用的WWW路径</returns>
         public static string GetWWWPath() {
-            string wwwPath = String.Empty;
+            string wwwPath = String.Empty; // 本地加载Ab包所使用的WWW路径
             switch (Application.platform) {
                 // Windows
                 case RuntimePlatform.WindowsPlayer:
@@ -109,5 +111,5 @@ namespace AssetBundleFramework.Tools {
 
             return wwwPath;
         }
-    }// Class_End
-}// Namespace_End
+    } // Class_End
+} // Namespace_End

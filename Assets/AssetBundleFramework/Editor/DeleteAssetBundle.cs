@@ -4,7 +4,8 @@ using UnityEditor;
 
 namespace AssetBundleFramework.Editor {
     /// <summary>
-    /// 删除已经打包的Ab包文件
+    /// 删除输出路径下的所有的打包文件
+    /// 防止已有的AssetBundle对新的AssetBundle产生印象
     /// </summary>
     public static class DeleteAssetBundle {
         /// <summary>
@@ -12,14 +13,12 @@ namespace AssetBundleFramework.Editor {
         /// </summary>
         [MenuItem("AssetBundleTools/Delete All AssetBundle", false, 40)]
         public static void DeleteAllAssetBundle() {
-            // Ab包的输出目录
-            string delDir = PathTools.GetAbOutputPath();
+            string delDir = PathTools.GetAbOutputPath(); // Ab包的输出目录
             if (!string.IsNullOrEmpty(delDir)) {
-                // 删除路径下的所有文件和*.meta文件
-                Directory.Delete(delDir, true);
+                Directory.Delete(delDir, true); // 删除输出目录下的所有文件和*.meta文件
             }
-            // 刷新Asset/
-            AssetDatabase.Refresh();
+
+            AssetDatabase.Refresh(); // 刷新Project面板
         }
     } // Class_End
 } // Namespace_End

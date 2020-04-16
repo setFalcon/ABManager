@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 4246191134
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a8f2a804ce6234178261724513cb0043
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f19fbf085e00d23fbc8d6cf7b345590b
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/AB_Res/Test_Scene/Textures/CubeTex.jpg
+Dependencies: []
