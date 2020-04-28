@@ -44,7 +44,7 @@ namespace AssetBundleFramework {
                     AssetBundle tmpManifest = www.assetBundle;
                     if (tmpManifest != null) { // 获取成功
                         _readManifest = tmpManifest;
-                        _manifest = _readManifest.LoadAsset("AssetBundleManifest")
+                        _manifest = _readManifest.LoadAsset(AssetBundleDefine.ASSETBUNDLE_MANIFEST)
                             as AssetBundleManifest; // 获取AssetBundle清单,AssetBundleManifest是固定常量
                         IsLoadFinish = true; // 加载失败
                     }
@@ -75,11 +75,21 @@ namespace AssetBundleFramework {
         /// </summary>
         /// <param name="abName">要查询的AssetBundle名称</param>
         /// <returns>所有的依赖包名称</returns>
-        public string[] RetrivalDepend(string abName) { }
+        public string[] RetrivalDepend(string abName) {
+            if (_manifest != null && !string.IsNullOrEmpty(abName)) {
+                return _manifest.GetAllDependencies(abName); // 从Manifest中获取依赖包名称数组
+            }
+
+            return null;
+        }
 
         /// <summary>
-        /// 释放资源
+        /// 释放引用的资源
         /// </summary>
-        public void Dispose() { }
+        public void Dispose() {
+            if (_readManifest != null) {
+                _readManifest.Unload(true);
+            }
+        }
     } // Class_End
 } // Namespace_End

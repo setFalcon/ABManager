@@ -10,6 +10,6 @@ namespace AssetBundleFramework.Tools {
     /// 所有的常量以及枚举类型的封装
     /// </summary>
     public class AssetBundleDefine {
-        
+        public const string ASSETBUNDLE_MANIFEST = "AssetBundleManifest";
     }
 }
