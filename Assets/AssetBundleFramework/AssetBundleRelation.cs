@@ -57,8 +57,35 @@ namespace AssetBundleFramework {
         }
 
         ///////////////////////////管理AssetBundle引用关系///////////////////////////
-        // 增加引用
-        // 移除引用
-        // 获取所有引用
+        /// <summary>
+        /// 对_abName包增加引用的AssetBundle
+        /// </summary>
+        /// <param name="abName">添加的引用包名称</param>
+        public void AddReference(string abName) {
+            if (!string.IsNullOrEmpty(abName) && !_referenceAssetBundleList.Contains(abName)) { // 未包含此包的引用项
+                _referenceAssetBundleList.Add(abName);
+            }
+        }
+
+        /// <summary>
+        /// 对_abName包移除引用的AssetBundle
+        /// </summary>
+        /// <param name="abName">移除的引用包名称</param>
+        /// <returns>true : AssetBundle没有引用项, false : AssetBundle还存在引用项</returns>
+        public bool RemoveReference(string abName) {
+            if (_referenceAssetBundleList.Contains(abName)) { // 未包含此包的引用项
+                _referenceAssetBundleList.Remove(abName);
+            }
+
+            return _referenceAssetBundleList.Count == 0;
+        }
+
+        /// <summary>
+        /// 获取_abName包所有依赖的AssetBundle列表
+        /// </summary>
+        /// <returns>依赖的AssetBundle列表</returns>
+        public List<string> GetAllReference() {
+            return _referenceAssetBundleList;
+        }
     } // Class_End
 } // Namespace_End
