@@ -56,7 +56,7 @@ namespace AssetBundleFramework.Tools {
         /// 获取平台的名称
         /// </summary>
         /// <returns>平台名称</returns>
-        private static string GetPlatformName() {
+        public static string GetPlatformName() {
             string platformName = String.Empty;
             switch (Application.platform) {
                 // Windows
