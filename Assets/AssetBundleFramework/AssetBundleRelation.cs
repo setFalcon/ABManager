@@ -16,15 +16,47 @@ namespace AssetBundleFramework {
         /// </summary>
         /// <param name="abName">AssetBundle名称</param>
         public AssetBundleRelation(string abName) {
-            _abName = abName;
+            if (!string.IsNullOrEmpty(abName)) {
+                _abName = abName;
+            }
+
+            _dependAssetBundleList = new List<string>();
+            _referenceAssetBundleList = new List<string>();
         }
 
-        /*依赖关系*/
-        // 增加依赖
-        // 移除依赖
-        // 获取所有依赖
-        
-        /*引用关系*/
+        ///////////////////////////管理AssetBundle依赖关系///////////////////////////
+        /// <summary>
+        /// 对_abName包增加依赖的AssetBundle
+        /// </summary>
+        /// <param name="abName">添加的依赖包名称</param>
+        public void AddDepend(string abName) {
+            if (!string.IsNullOrEmpty(abName) && !_dependAssetBundleList.Contains(abName)) { // 未包含此包的依赖项
+                _dependAssetBundleList.Add(abName);
+            }
+        }
+
+        /// <summary>
+        /// 对_abName包移除依赖的AssetBundle
+        /// </summary>
+        /// <param name="abName">移除的依赖包名称</param>
+        /// <returns>true : AssetBundle没有依赖项, false : AssetBundle还存在依赖项</returns>
+        public bool RemoveDepend(string abName) {
+            if (_dependAssetBundleList.Contains(abName)) { // 未包含此包的依赖项
+                _dependAssetBundleList.Remove(abName);
+            }
+
+            return _dependAssetBundleList.Count == 0;
+        }
+
+        /// <summary>
+        /// 获取_abName包所有依赖的AssetBundle列表
+        /// </summary>
+        /// <returns>依赖的AssetBundle列表</returns>
+        public List<string> GetAllDepend() {
+            return _dependAssetBundleList;
+        }
+
+        ///////////////////////////管理AssetBundle引用关系///////////////////////////
         // 增加引用
         // 移除引用
         // 获取所有引用
