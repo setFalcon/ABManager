@@ -95,7 +95,7 @@ AssetBundle Manager提供编辑器拓展功能，在您的项目中正确安装�
   	//平台路径
   	string platformPath = String.Empty;
   	switch (Application.platform) {
-  		......//per codes...
+  		......//pre codes...
   		case RuntimePlatform.#:
   			// 此处的路径应由平台性质决定
   			// 一般来说Liunx与Windows平台使用Application.streamingAssetsPath
