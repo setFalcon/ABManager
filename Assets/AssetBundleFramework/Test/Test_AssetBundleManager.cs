@@ -34,5 +34,9 @@ namespace AssetBundleFramework.Test {
                 AssetBundleManager.GetInstance().DisposeAllAssets(sceneName);
             }
         }
+
+        private void OnDestroy() {
+            AssetBundleManager.GetInstance().DisposeAllAssets(sceneName);
+        }
     }
 }

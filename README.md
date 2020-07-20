@@ -2,48 +2,66 @@
 
 ## ❓什么是AssetBundle Manager
 
-​	AssetBundle Manager是支持自动化标记资源打包路径、自动化打包加载AssetBundle、获取Asset资源、自动卸载以及包管理的Unity开发插件。
+AssetBundle Manager是支持自动化标记资源打包路径、自动化打包加载AssetBundle、获取Asset资源、自动卸载以及包管理的Unity开发插件。
 
 ## 📕如何使用
 
-​	使用给git工具，使用**git clone**命令将此项目clone到您的计算机上，将[^AssetBundleFramework/]文件夹下的所有文件拷贝至您Unity项目的Asset/文件夹下。您也可以使用Clone or Download功能下载此项目的zip压缩包，按照上述过程将此项目部署即可。
+使用给git工具，使用**git clone**命令将此项目clone到您的计算机上，将AssetBundleFramework/文件夹下的所有文件拷贝至您Unity项目的Asset/文件夹下。您也可以使用Clone or Download功能下载此项目的zip压缩包，按照上述过程将此项目部署即可。
 
 ## :airplane:快速入门
 
-​	AssetBundle Manager提供编辑器拓展功能，在您的项目中正确安装后，您的Unity会出现一项新的名称为AssetBundle的新Menu。此Menu中提供了多种已经实现了相应功能的MenuItem，诸如：自动标记、多平台自动打包、自动清理已经完成的打包等功能，您只需要做极小的改动就能快速使用。
+AssetBundle Manager提供编辑器拓展功能，在您的项目中正确安装后，您的Unity会出现一项新的名称为AssetBundle的新Menu。此Menu中提供了多种已经实现了相应功能的MenuItem，诸如：自动标记、多平台自动打包、自动清理已经完成的打包等功能，您只需要做极小的改动就能快速使用。
 
 - 加载简单无依赖关系的资源:
 
-  ​	此功能的实现是非常简单的，您只需使用[^SingleAssetBundleLoader.cs]中的方法即可完成此项工作，下面给出了一个简单的实现供您参考：
+  	此功能的实现是非常简单的，您只需使用AssetBundleManager.cs中的方法即可完成此项工作，下面给出了一个简单的实现供您参考：
 
   ``` C#
-  public class Test : MonoBehaviour {
-  	private SingleAssetBundleLoader _assetBundleLoader;	//加载器的引用
-  	private string _abName = "abName";					//需要加载的AssetBundle名称
-  	private string _assetName = "assetName";			//需要加载的资源名称
-  	private void Start() {
-  		_assetBundleLoader = new SingleAssetBundleLoader(_abName, LoadComplete); 
-  		StartCoroutine(_assetBundleLoader.LoadABWWW());	//加载AssetBundle
-  	}
-  	private void LoadComplete(string abName) {			//完成加载的回调方法
-  		Object cloneObject = _assetBundleLoader.LoadAsset(_assetName, false);
-  		Instantiate(cloneObject);
-  	}
-  	private void OnDestroy() {
-  		_assetBundleLoader.DisposeAll();				//释放无用资源
-  	}
+  public class Test_SingleAssetBundleLoader : MonoBehaviour {
+      private SingleAssetBundleLoader _assetBundleLoader; // SingleAssetBundleLoader引用
+      private string _abName = "test_scene/prefabs.ab"; // 需要加载的Ab包
+      private string _simpleAssetName = "Cylinder.prefab"; // 需要加载的资源名称
+      private void Start() {
+          _assetBundleLoader = new SingleAssetBundleLoader(_abName, LoadComplete); // 创建实例
+          StartCoroutine(_assetBundleLoader.LoadABWWW()); // 加载Ab包
+      }
+      private void LoadComplete(string abName) { // 完成Ab包加载的回调方法
+          Object cloneObject = _assetBundleLoader.LoadAsset(_simpleAssetName, false); // 加载资源并实例化
+          Instantiate(cloneObject);
+      }
+      private void OnDestroy() { _assetBundleLoader.DisposeAll(); } // 释放无用资源
   }
   ```
-
   
+- 加载复杂带有依赖关系的资源
+
+   此功能的实现是非常简单的，您只需使用SingleAssetBundleLoader.cs中的方法即可完成此项工作，下面给出了一个简单的实现供您参考：
+   
+   ``` C#
+   public class Test_AssetBundleManager : MonoBehaviour {
+       private string sceneName = "test_scene"; // 场景名称
+       private string abName = "test_scene/prefabs.ab"; // ab包名称
+       private string assetName = "Cube"; // 资源名称
+       private void Start() {
+           StartCoroutine(AssetBundleManager.GetInstance().LoadAssetBundlePack(sceneName, abName, LoadABComplete));
+       }
+       private void LoadABComplete(string abname) { // 所有的资源全部加载完成
+           Object obj = AssetBundleManager.GetInstance().LoadAsset(sceneName, abName, assetName, false); // 提取资源
+           if (obj!=null) { Instantiate(obj); } // 资源实例化
+       }
+       private void OnDestroy() { AssetBundleManager.GetInstance().DisposeAllAssets(sceneName); } // 释放资源
+   }
+   ```
+   
+   
 
 ## :hammer:需要做什么修改
 
-​	此框架的耦合性已经在开发过程中尽力降低，故此您需要改动的地方极少：
+此框架的耦合性已经在开发过程中尽力降低，故此您需要改动的地方极少：
 
 1. Asset资源路径
 
-   ​	您需要将所有的Asset资源放入“AB_Res”目录下，并按照场景和用途分类，分类后的资源相对路径将会类似于这样：[^Asset/AB_Res/Scene_1/Materials/DemoMat.mat]，您也可以通过修改脚本[^PathTools.cs]更改Asset资源存放的目录名称。
+   	您需要将所有的Asset资源放入“AB_Res”目录下，并按照场景和用途分类，分类后的资源相对路径将会类似于这样：Asset/AB_Res/Scene_1/Materials/DemoMat.mat，您也可以通过修改脚本PathTools.cs更改Asset资源存放的目录名称。
 
    ```C#
    public const string AB_RESOURCES = "您希望修改的目录名称";
@@ -120,16 +138,6 @@
   }
   ```
 
-## :1234:TODO List
+## :grey_question:可能的问题
 
-- 自动加载AssetBunlde依赖未完成
-- 多包管理功能没有实现
-
-
-
-[^AssetBundleFramework/]: http://101.200.242.244:3000/setFalcon/ABManager/src/master/Assets/AssetBundleFramework
-[^Asset/AB_Res/Scene_1/Materials/DemoMat.mat]:资源名称为DemoMat，位于场景名称为Scene_1的场景中，是一个材质资源
-[^PathTools.cs]:http://101.200.242.244:3000/setFalcon/ABManager/src/master/Assets/AssetBundleFramework/Tools/PathTools.cs
-[^BuildAssetBundle.cs]:http://101.200.242.244:3000/setFalcon/ABManager/src/master/Assets/AssetBundleFramework/Editor/BuildAssetBundle.cs
-[^SingleAssetBundleLoader.cs]: http://101.200.242.244:3000/setFalcon/ABManager/src/master/Assets/AssetBundleFramework/SingleAssetBundleLoader.cs
-
+- [ ] AssetBundle资源的清理可能存在问题

@@ -101,7 +101,7 @@ namespace AssetBundleFramework.Tools {
                     break;
                 // IOS
                 case RuntimePlatform.IPhonePlayer:
-                    wwwPath = "file://" + GetAbOutputPath();
+                    wwwPath = "file://" + GetAbOutputPath()+"/Raw";
                     break;
                 // Android
                 case RuntimePlatform.Android:
