@@ -1,11 +1,10 @@
 ManifestFileVersion: 0
-CRC: 2064055998
+CRC: 980944375
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: test_scene/materials.ab
-      Dependencies:
-        Dependency_0: test_scene/textures.ab
+      Dependencies: {}
     Info_1:
       Name: test_scene/prefabs.ab
       Dependencies:
