@@ -120,7 +120,7 @@ namespace AssetBundleFramework {
         /// <summary>
         /// 释放所有资源,场景切换时进行调用
         /// </summary>
-        public void DisposeAllAsset() {
+        public void DisposeAllAssets() {
             try {
                 foreach (SingleAssetBundleLoader loader in _loaderCacheDict.Values) { // 逐一释放所有加载过的AssetBundle
                     loader.DisposeAll();
