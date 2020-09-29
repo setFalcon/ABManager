@@ -112,7 +112,7 @@ AssetBundle Manager提供编辑器拓展功能，在您的项目中正确安装�
   private static string GetPlatformName() {
   	string platformName = String.Empty;
   	switch (Application.platform) {
-  		......//per codes...
+  		......//pre codes...
   		case RuntimePlatform.#:
   			platformName = "#";
   		break;
@@ -126,7 +126,7 @@ AssetBundle Manager提供编辑器拓展功能，在您的项目中正确安装�
   public static string GetWWWPath() {
   	string wwwPath = String.Empty;
   	switch (Application.platform) {
-  		......//per codes...
+  		......//pre codes...
   		case RuntimePlatform.#:
   			// 此处的路径应由平台性质决定
   			// 一般来说Windows平台使用"file://" + GetAbOutputPath()
