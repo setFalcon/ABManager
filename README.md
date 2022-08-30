@@ -1,4 +1,4 @@
-![AssetBundle Manager](https://ftp.bmp.ovh/imgs/2020/04/94fdc6d248a8bea5.png)
+# use addressable instead
 
 ## ❓什么是AssetBundle Manager
 
